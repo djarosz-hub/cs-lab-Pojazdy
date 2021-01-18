@@ -4,9 +4,10 @@ using System.Text;
 
 namespace ClassLibrary1
 {
-    interface IFlyable
+    public enum SpeedUnits
     {
-         const int MinSpeed = 20;
-         const int MaxSpeed = 200;
+        KMpH,
+        MpS,
+        Knots
     }
 }

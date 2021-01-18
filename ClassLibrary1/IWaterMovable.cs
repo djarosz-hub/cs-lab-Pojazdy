@@ -4,7 +4,9 @@ using System.Text;
 
 namespace ClassLibrary1
 {
-    class IWaterMovable
+    interface IWaterMovable
     {
+         const int MinSpeed = 1;
+         const int MaxSpeed = 40;
     }
 }

@@ -4,17 +4,30 @@ using System.Text;
 
 namespace ClassLibrary1
 {
-    public class testowaKlasa : EnginePoweredVehicle
+    public class testowaKlasa : EnginePoweredVehicle, IDriveable
     {
-        public int Losulosu;
+        private int _wheels;
         public testowaKlasa(int x, Engine.FuelType y) : base(x, y)
         {
-            Losulosu = 5;
-
+            AvailableEnvironments.Add(Environments.Flying);
+            AvailableEnvironments.Add(Environments.OnGround);
+            _wheels = 4;
+            
         }
-        public override string ToString()
+        public int Wheels
         {
-            return $"{_engine}";
+            get
+            {
+                return _wheels;
+            }
         }
+        public void Accelerate(int value)
+        {
+            MovingSpeed = IDriveable.TryToAccelerate(MovingSpeed,value);
+        }
+        //public override string ToString()
+        //{
+        //    return $"{GetEngineInfo()}";
+        //}
     }
 }

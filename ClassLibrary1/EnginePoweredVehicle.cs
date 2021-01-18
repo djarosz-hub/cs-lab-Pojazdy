@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ClassLibrary1
 {
-    public class EnginePoweredVehicle : AbstractVehicle
+    public abstract class EnginePoweredVehicle : AbstractVehicle
     {
         protected readonly Engine _engine;
         public EnginePoweredVehicle(int horsePower, Engine.FuelType fuelType)

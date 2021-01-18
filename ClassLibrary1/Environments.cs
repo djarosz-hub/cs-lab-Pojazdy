@@ -4,9 +4,10 @@ using System.Text;
 
 namespace ClassLibrary1
 {
-    interface IFlyable
+    public enum Environments
     {
-         const int MinSpeed = 20;
-         const int MaxSpeed = 200;
+        OnGround,
+        Flying,
+        Sailing
     }
 }
