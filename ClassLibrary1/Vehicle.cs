@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ClassLibrary1
 {
-    public abstract class AbstractVehicle
+    public abstract class Vehicle
     {
         public enum State { Moving, Staying }
 
@@ -40,10 +40,8 @@ namespace ClassLibrary1
         }
         public override string ToString()
         {
-            string temp = "";
-            foreach (var e in AvailableEnvironments)
-                temp += e.ToString()+" " ;
-            return $"Actual enviroment: {ActualEnvironment}\nActual state: {_state}\nActual speed: {MovingSpeed}\nAvaiable environemnts:{temp}";
+            string temp = string.Join(", ", AvailableEnvironments);
+            return $"\nActual enviroment: {ActualEnvironment}\nActual state: {_state}\nActual speed: {MovingSpeed}\nAvaiable environemnts: {temp}";
         }
     }
 }

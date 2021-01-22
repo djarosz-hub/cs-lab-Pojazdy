@@ -6,8 +6,9 @@ namespace ClassLibrary1
 {
     internal class FlyingModule
     {
-        private readonly int MaxSpeed = 200;
-        private readonly int MinSpeed = 20;
-        private readonly SpeedUnits SpeedUnit = SpeedUnits.MpS;
+        public readonly int MaxSpeed = 200;
+        public readonly int MinSpeed = 20;
+        public readonly SpeedUnits SpeedUnit = SpeedUnits.MpS;
+       
     }
 }

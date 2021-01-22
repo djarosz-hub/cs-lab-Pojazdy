@@ -17,6 +17,7 @@ namespace ConsoleApp1
             Console.WriteLine(testowa.Wheels);
             testowa.Accelerate(550);
             Console.WriteLine(testowa.ToString());
+            Console.WriteLine(testowa.Name);
 
             //double val = AbstractVehicle.UnitConverter(10, AbstractVehicle.SpeedUnits.KMpH, AbstractVehicle.SpeedUnits.Knots);
             //double val1 = AbstractVehicle.UnitConverter(val, AbstractVehicle.SpeedUnits.Knots, AbstractVehicle.SpeedUnits.MpS);

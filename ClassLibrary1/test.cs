@@ -14,13 +14,9 @@ namespace ClassLibrary1
             _wheels = 4;
             
         }
-        public int Wheels
-        {
-            get
-            {
-                return _wheels;
-            }
-        }
+        public string Name => GetType().Name;
+
+        public int Wheels => _wheels;
         public void Accelerate(int value)
         {
             MovingSpeed = IDriveable.TryToAccelerate(MovingSpeed,value);
