@@ -14,6 +14,7 @@ namespace ClassLibrary1
             _wheels = 4;
             
         }
+        
         public string Name => GetType().Name;
 
         public int Wheels => _wheels;
