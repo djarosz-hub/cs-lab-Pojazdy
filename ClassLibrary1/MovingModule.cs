@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text;
-
 namespace ClassLibrary1
 {
     internal class MovingModule
@@ -90,40 +90,47 @@ namespace ClassLibrary1
             }
             double min = 0;
             double max = 0;
+            SpeedUnits? temp = null;
+            actualState = Vehicle.State.Moving;
             switch (actualEnvironment)
             {
                 case Environments.OnGround:
-                    min = drivingModule.MinSpeed;
-                    max = drivingModule.MaxSpeed;
+                    min = DrivingModule.MinSpeed;
+                    max = DrivingModule.MaxSpeed;
+                    temp = SpeedUnits.KMpH;
                     if (targetSpeed <= max)
                     {
                         actualSpeed = targetSpeed;
-                        Console.WriteLine($"{vehicleType} accelerated to {targetSpeed}{drivingModule.SpeedUnit}");
+                        Console.WriteLine($"{vehicleType} accelerated to {targetSpeed}{DrivingModule.SpeedUnit}");
                         return;
                     }
                     break;
                 case Environments.Flying:
-                    min = flyingModule.MinSpeed;
-                    max = flyingModule.MaxSpeed;
+                    min = FlyingModule.MinSpeed;
+                    max = FlyingModule.MaxSpeed;
+                    temp = SpeedUnits.MpS;
                     if (targetSpeed <= max)
                     {
                         actualSpeed = targetSpeed;
-                        Console.WriteLine($"{vehicleType} accelerated to {targetSpeed}{flyingModule.SpeedUnit}");
+                        Console.WriteLine($"{vehicleType} accelerated to {targetSpeed}{FlyingModule.SpeedUnit}");
                         return;
                     }
                     break;
                 case Environments.Sailing:
-                    min = sailingModule.MinSpeed;
-                    max = sailingModule.MaxSpeed;
+                    min = SailingModule.MinSpeed;
+                    max = SailingModule.MaxSpeed;
+                    temp = SpeedUnits.Knots;
                     if (targetSpeed <= max)
                     {
                         actualSpeed = targetSpeed;
-                        Console.WriteLine($"{vehicleType} accelerated to {targetSpeed}{sailingModule.SpeedUnit}");
+                        Console.WriteLine($"{vehicleType} accelerated to {targetSpeed}{SailingModule.SpeedUnit}");
                         return;
                     }
                     break;
             }
-            Console.WriteLine($"{targetSpeed} is out of range for {actualEnvironment} environment, type speed in range {min}-{max} for {vehicleType}.");
+            if(actualSpeed == 0)
+                actualState = Vehicle.State.Staying;
+            Console.WriteLine($"{targetSpeed}{temp} is out of range for {actualEnvironment} environment, type speed in range {min}-{max}{temp} for {vehicleType}.");
         }
         internal void TryToSlowDown(Environments actualEnvironment, ref Vehicle.State actualState, ref double actualSpeed, double targetSpeed, string vehicleType)
         {
@@ -134,7 +141,7 @@ namespace ClassLibrary1
             }
             if (targetSpeed < 0)
             {
-                Console.WriteLine($"{targetSpeed} is not valid for {vehicleType}.");
+                Console.WriteLine($"{targetSpeed} is not valid speed for {vehicleType}.");
                 return;
             }
             if (targetSpeed > actualSpeed)
@@ -152,32 +159,32 @@ namespace ClassLibrary1
             switch (actualEnvironment)
             {
                 case Environments.OnGround:
-                    min = drivingModule.MinSpeed;
-                    max = drivingModule.MaxSpeed;
+                    min = DrivingModule.MinSpeed;
+                    max = DrivingModule.MaxSpeed;
                     if (targetSpeed >= min)
                     {
                         actualSpeed = targetSpeed;
-                        Console.WriteLine($"{vehicleType} slowed down to {targetSpeed}{drivingModule.SpeedUnit}.");
+                        Console.WriteLine($"{vehicleType} slowed down to {targetSpeed}{DrivingModule.SpeedUnit}.");
                         return;
                     }
                     break;
                 case Environments.Flying:
-                    min = flyingModule.MinSpeed;
-                    max = flyingModule.MaxSpeed;
+                    min = FlyingModule.MinSpeed;
+                    max = FlyingModule.MaxSpeed;
                     if (targetSpeed >= min)
                     {
                         actualSpeed = targetSpeed;
-                        Console.WriteLine($"{vehicleType} slowed down to {targetSpeed}{flyingModule.SpeedUnit}");
+                        Console.WriteLine($"{vehicleType} slowed down to {targetSpeed}{FlyingModule.SpeedUnit}");
                         return;
                     }
                     break;
                 case Environments.Sailing:
-                    min = sailingModule.MinSpeed;
-                    max = sailingModule.MaxSpeed;
+                    min = SailingModule.MinSpeed;
+                    max = SailingModule.MaxSpeed;
                     if (targetSpeed >= min)
                     {
                         actualSpeed = targetSpeed;
-                        Console.WriteLine($"{vehicleType} slowed down to {targetSpeed}{sailingModule.SpeedUnit}");
+                        Console.WriteLine($"{vehicleType} slowed down to {targetSpeed}{SailingModule.SpeedUnit}");
                         return;
                     }
                     break;
@@ -191,25 +198,25 @@ namespace ClassLibrary1
             double convertedSpeed = 0;
             if (actualEnvironment == Environments.Flying)
             {
-                if (actualSpeed != flyingModule.MinSpeed)
+                if (actualSpeed != FlyingModule.MinSpeed)
                 {
-                    Console.WriteLine($"Flying vehicles can land only at minimum speed {flyingModule.MinSpeed}{flyingModule.SpeedUnit}, your actual speed is {actualSpeed}{flyingModule.SpeedUnit}, slow down first before landing.");
+                    Console.WriteLine($"Flying vehicles can land only at minimum speed {FlyingModule.MinSpeed}{FlyingModule.SpeedUnit}, your actual speed is {actualSpeed}{FlyingModule.SpeedUnit}, slow down first before landing.");
                     return;
                 }
                 convertedSpeed = Vehicle.UnitConverter(actualSpeed, SpeedUnits.MpS, SpeedUnits.Knots);
-                Console.WriteLine($"Succesfully landed on water, your actual speed is {convertedSpeed}{sailingModule.SpeedUnit}");
+                Console.WriteLine($"Succesfully landed on water, your actual speed is {convertedSpeed}{SailingModule.SpeedUnit}");
             }
             if (actualEnvironment == Environments.OnGround)
             {
                 convertedSpeed = Vehicle.UnitConverter(actualSpeed, SpeedUnits.KMpH, SpeedUnits.Knots);
-                if (convertedSpeed > sailingModule.MaxSpeed)
+                if (convertedSpeed > SailingModule.MaxSpeed)
                 {
-                    Console.WriteLine($"Your actual speed {actualSpeed}{drivingModule.SpeedUnit} = {convertedSpeed}{sailingModule.SpeedUnit} is too fast to sail, slow down at least to {sailingModule.MaxSpeed}{sailingModule.SpeedUnit}");
+                    Console.WriteLine($"Your actual speed {actualSpeed}{DrivingModule.SpeedUnit} = {convertedSpeed}{SailingModule.SpeedUnit} is too fast to sail, slow down at least to {SailingModule.MaxSpeed}{SailingModule.SpeedUnit}");
                     return;
                 }
-                if (convertedSpeed < sailingModule.MinSpeed)
+                if (convertedSpeed < SailingModule.MinSpeed)
                 {
-                    Console.WriteLine($"Your actual speed {actualSpeed}{drivingModule.SpeedUnit} = {convertedSpeed}{sailingModule.SpeedUnit} is too slow to sail, speed up at least to {sailingModule.MinSpeed}{sailingModule.SpeedUnit}");
+                    Console.WriteLine($"Your actual speed {actualSpeed}{DrivingModule.SpeedUnit} = {convertedSpeed}{SailingModule.SpeedUnit} is too slow to sail, speed up at least to {SailingModule.MinSpeed}{SailingModule.SpeedUnit}");
                     return;
                 }
                 Console.WriteLine($"Succesfully started to sail, your actual speed is {convertedSpeed}{SpeedUnits.Knots}");
@@ -224,18 +231,18 @@ namespace ClassLibrary1
             double convertedSpeed = 0;
             if (actualEnvironment == Environments.Flying)
             {
-                if (actualSpeed != flyingModule.MinSpeed)
+                if (actualSpeed != FlyingModule.MinSpeed)
                 {
-                    Console.WriteLine($"Flying vehicles can land only at minimum speed {flyingModule.MinSpeed}{flyingModule.SpeedUnit}, your actual speed is {actualSpeed}{flyingModule.SpeedUnit}, slow down first before landing.");
+                    Console.WriteLine($"Flying vehicles can land only at minimum speed {FlyingModule.MinSpeed}{FlyingModule.SpeedUnit}, your actual speed is {actualSpeed}{FlyingModule.SpeedUnit}, slow down first before landing.");
                     return;
                 }
                 convertedSpeed = Vehicle.UnitConverter(actualSpeed, SpeedUnits.MpS, SpeedUnits.KMpH);
-                Console.WriteLine($"Succesfully landed on ground, your actual speed is {convertedSpeed}{drivingModule.SpeedUnit}");
+                Console.WriteLine($"Succesfully landed on ground, your actual speed is {convertedSpeed}{DrivingModule.SpeedUnit}");
             }
             if(actualEnvironment == Environments.Sailing)
             {
                 convertedSpeed = Vehicle.UnitConverter(actualSpeed, SpeedUnits.Knots, SpeedUnits.KMpH);
-                Console.WriteLine($"Succesfully left watar and started to drive, your actual speed is {convertedSpeed}{drivingModule.SpeedUnit}");
+                Console.WriteLine($"Succesfully left water and started to drive, your actual speed is {convertedSpeed}{DrivingModule.SpeedUnit}");
             }
             actualSpeed = convertedSpeed;
             actualEnvironment = Environments.OnGround;
@@ -248,25 +255,26 @@ namespace ClassLibrary1
             if(actualEnvironment == Environments.OnGround)
             {
                 convertedSpeed = Vehicle.UnitConverter(actualSpeed, SpeedUnits.KMpH, SpeedUnits.MpS);
-                if (convertedSpeed < flyingModule.MinSpeed)
+                if (convertedSpeed < FlyingModule.MinSpeed)
                 {
-                    Console.WriteLine($"Your actual speed is {actualSpeed}{drivingModule.SpeedUnit} = {convertedSpeed}{flyingModule.SpeedUnit}. Minimum speed required to get off ground is {flyingModule.MinSpeed}{flyingModule.SpeedUnit}. Speed up!");
+                    Console.WriteLine($"Your actual speed is {actualSpeed}{DrivingModule.SpeedUnit} = {convertedSpeed}{FlyingModule.SpeedUnit}. Minimum speed required to get off ground is {FlyingModule.MinSpeed}{FlyingModule.SpeedUnit}. Speed up!");
                     return;
                 }
             }
             if(actualEnvironment == Environments.Sailing)
             {
                 convertedSpeed = Vehicle.UnitConverter(actualSpeed, SpeedUnits.Knots, SpeedUnits.MpS);
-                if(convertedSpeed < flyingModule.MinSpeed)
+                if(convertedSpeed < FlyingModule.MinSpeed)
                 {
-                    Console.WriteLine($"Your actual speed is {actualSpeed}{sailingModule.SpeedUnit} = {convertedSpeed}{flyingModule.SpeedUnit}. Minimum speed required to get off water is {flyingModule.MinSpeed}{flyingModule.SpeedUnit}. Speed up!");
+                    Console.WriteLine($"Your actual speed is {actualSpeed}{SailingModule.SpeedUnit} = {convertedSpeed}{FlyingModule.SpeedUnit}. Minimum speed required to get off water is {FlyingModule.MinSpeed}{FlyingModule.SpeedUnit}. Speed up!");
                     return;
                 }
             }
-            Console.WriteLine($"Succefully started to fly. Your actual speed is {convertedSpeed}{flyingModule.SpeedUnit}");
+            Console.WriteLine($"Succefully started to fly. Your actual speed is {convertedSpeed}{FlyingModule.SpeedUnit}");
             actualSpeed = convertedSpeed;
             actualEnvironment = Environments.Flying;
         }
+
         private void NotMovingVehicleMsg(string vehicleType) => Console.WriteLine($"{vehicleType} is not moving.");
         private bool IsAlreadyInProperEnvironment(Environments target, Environments actual) => target == actual ? true : false;
         private bool IsVehicleStaying(Vehicle.State actual) => actual == Vehicle.State.Staying ? true : false;

@@ -14,7 +14,7 @@ namespace ClassLibrary1
         public string GetEngineInfo() => _engine.ToString();
         public override string ToString()
         {
-            return GetEngineInfo() + base.ToString();
+            return base.ToString() + GetEngineInfo();
         }
     }
 }

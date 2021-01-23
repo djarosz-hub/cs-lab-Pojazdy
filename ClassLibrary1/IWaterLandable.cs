@@ -4,8 +4,8 @@ using System.Text;
 
 namespace ClassLibrary1
 {
-    public interface IDriveable
+    public interface IWaterLandable
     {
-      int Wheels { get; }
+        void LandOnWater();
     }
 }

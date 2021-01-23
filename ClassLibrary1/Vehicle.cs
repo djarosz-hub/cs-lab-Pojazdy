@@ -15,6 +15,8 @@ namespace ClassLibrary1
         public static double UnitConverter(double speed, SpeedUnits from, SpeedUnits to)
         {
             double val = 0;
+            if (from == to)
+                return speed;
             switch (from)
             {
                 case SpeedUnits.KMpH:
@@ -36,12 +38,33 @@ namespace ClassLibrary1
                         val = speed * 0.514;
                     break;
             }
-            return val;
+            return Math.Round(val, 2, MidpointRounding.AwayFromZero);
         }
         public override string ToString()
         {
+            int min = 0;
+            int max = 0;
+            SpeedUnits? unit = null;
+            switch (ActualEnvironment)
+            {
+                case Environments.OnGround:
+                    min = DrivingModule.MinSpeed;
+                    max = DrivingModule.MaxSpeed;
+                    unit = SpeedUnits.KMpH;
+                    break;
+                case Environments.Flying:
+                    min = FlyingModule.MinSpeed;
+                    max = FlyingModule.MinSpeed;
+                    unit = SpeedUnits.MpS;
+                    break;
+                case Environments.Sailing:
+                    min = SailingModule.MinSpeed;
+                    max = SailingModule.MaxSpeed;
+                    unit = SpeedUnits.Knots;
+                    break;
+            }
             string temp = string.Join(", ", AvailableEnvironments);
-            return $"\nActual enviroment: {ActualEnvironment}\nActual state: {_state}\nActual speed: {MovingSpeed}\nAvaiable environemnts: {temp}";
+            return $"\nActual enviroment: {ActualEnvironment}\nActual state: {_state}\nActual speed: {MovingSpeed}\nAvaiable environemnts: {temp}\nSpeed range avaiable in actual environment: {min}-{max}{unit}\n";
         }
     }
 }

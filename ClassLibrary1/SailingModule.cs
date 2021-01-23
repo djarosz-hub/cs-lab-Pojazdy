@@ -7,9 +7,9 @@ namespace ClassLibrary1
     internal class SailingModule
     {
         internal readonly int _buoyancy;
-        internal readonly int MaxSpeed = 40;
-        internal readonly int MinSpeed = 1;
-        internal readonly SpeedUnits SpeedUnit = SpeedUnits.Knots;
+        public static readonly int MaxSpeed = 40;
+        public static readonly int MinSpeed = 1;
+        public static readonly SpeedUnits SpeedUnit = SpeedUnits.Knots;
 
         internal SailingModule(int buoyancy)
         {

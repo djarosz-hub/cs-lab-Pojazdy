@@ -4,9 +4,10 @@ using System.Text;
 
 namespace ClassLibrary1
 {
-    interface IWaterMovable
+    interface ISailable
     {
-         const int MinSpeed = 1;
-         const int MaxSpeed = 40;
+        void Sail();
+        void LeaveWater();
+        int Buoyancy { get; }
     }
 }
