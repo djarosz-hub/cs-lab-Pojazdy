@@ -11,6 +11,25 @@ namespace ClassLibrary1
         protected double MovingSpeed;
         protected State _state = State.Staying;
         protected Environments ActualEnvironment;
+        public Environments actualEnv => ActualEnvironment;
+        public double ActualSpeed => MovingSpeed;
+        public SpeedUnits actualUnit
+        {
+            get 
+            {
+                switch (actualEnv)
+                {
+                    case Environments.Flying:
+                        return SpeedUnits.MpS;
+                    case Environments.OnGround:
+                        return SpeedUnits.KMpH;
+                    case Environments.Sailing:
+                        return SpeedUnits.Knots;
+                    default:
+                        return SpeedUnits.KMpH;
+                } 
+            }
+        }
         protected List<Environments> AvailableEnvironments = new List<Environments>();
         public static double UnitConverter(double speed, SpeedUnits from, SpeedUnits to)
         {
@@ -54,7 +73,7 @@ namespace ClassLibrary1
                     break;
                 case Environments.Flying:
                     min = FlyingModule.MinSpeed;
-                    max = FlyingModule.MinSpeed;
+                    max = FlyingModule.MaxSpeed;
                     unit = SpeedUnits.MpS;
                     break;
                 case Environments.Sailing:
@@ -64,7 +83,7 @@ namespace ClassLibrary1
                     break;
             }
             string temp = string.Join(", ", AvailableEnvironments);
-            return $"\nActual enviroment: {ActualEnvironment}\nActual state: {_state}\nActual speed: {MovingSpeed}\nAvaiable environemnts: {temp}\nSpeed range avaiable in actual environment: {min}-{max}{unit}\n";
+            return $"\nActual enviroment: {ActualEnvironment}\nActual state: {_state}\nActual speed: {MovingSpeed}{unit}\nAvailable environemnts: {temp}\nSpeed range avaiable in actual environment: {min}-{max}{unit}\n";
         }
     }
 }

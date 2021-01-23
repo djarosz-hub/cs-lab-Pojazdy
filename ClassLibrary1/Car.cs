@@ -12,13 +12,13 @@ namespace ClassLibrary1
         {
             AvailableEnvironments.Add(Environments.OnGround);
             _wheels = 4;
-            _MovingModule = new MovingModule(true, 4);
+            _MovingModule = new MovingModule(true, Wheels);
         }
         public string Name => GetType().Name;
         public int Wheels => _wheels;
         public override string ToString()
         {
-            return $"{Name}"+ base.ToString() + $"\nWheels: {Wheels}\n";
+            return $"{Name}"+ base.ToString() + $"Wheels: {Wheels}\n";
         }
         public void Accelerate(double targetSpeed)
         {

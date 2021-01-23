@@ -4,42 +4,47 @@ using System.Text;
 
 namespace ClassLibrary1
 {
-    public class Plane : EnginePoweredVehicle, IVehicle, IDriveable, IFlyable
+    public class Boat : EnginePoweredVehicle, IVehicle, ISailable
     {
-        private readonly int _wheels;
+        private readonly int _buoyancy;
         private MovingModule _MovingModule;
-        public int Wheels => _wheels;
         public string Name => GetType().Name;
-        public Plane(int horsePower, Engine.FuelType fuelType) : base (horsePower, fuelType)
+        public int Buoyancy => _buoyancy;
+        public Boat(int horsePower, int buoyancy) : base(horsePower, Engine.FuelType.Diesel)
         {
-            AvailableEnvironments.Add(Environments.OnGround);
-            AvailableEnvironments.Add(Environments.Flying);
-            _wheels = 2;
-            _MovingModule = new MovingModule(true, Wheels, true);
+            ActualEnvironment = Environments.Sailing;
+            AvailableEnvironments.Add(Environments.Sailing);
+            _buoyancy = buoyancy;
+            _MovingModule = new MovingModule(buoyancy, true);
         }
+
         public void Accelerate(double targetSpeed)
         {
             _MovingModule.TryToAccelerate(ActualEnvironment, ref _state, ref MovingSpeed, targetSpeed, Name);
         }
-        public void Fly()
+
+        public void LeaveWater()
         {
-            _MovingModule.TryToFly(ref ActualEnvironment, _state, ref MovingSpeed, Name);
+            Console.WriteLine($"{Name} can not leave water environment.");
         }
-        public void Land()
+
+        public void Sail()
         {
-            _MovingModule.TryToDrive(ref ActualEnvironment, _state, ref MovingSpeed, Name);
+            Console.WriteLine($"{Name} is already sailing.");
         }
+
         public void SlowDown(double targetSpeed)
         {
             _MovingModule.TryToSlowDown(ActualEnvironment, ref _state, ref MovingSpeed, targetSpeed, Name);
         }
+
         public void StopVehicle()
         {
             _MovingModule.StopMoving(ref _state, ActualEnvironment, ref MovingSpeed, Name);
         }
         public override string ToString()
         {
-            return $"{Name}" + base.ToString() + $"\nWheels: {Wheels}\n";
+            return $"{Name}" + base.ToString() + $"\nBuoyancy: {Buoyancy}\n";
         }
     }
 }

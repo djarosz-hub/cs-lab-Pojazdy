@@ -4,18 +4,20 @@ using System.Text;
 
 namespace ClassLibrary1
 {
-    public class Plane : EnginePoweredVehicle, IVehicle, IDriveable, IFlyable
+    public class Hydroplane : EnginePoweredVehicle, IVehicle,IFlyable,IWaterLandable
     {
-        private readonly int _wheels;
+        private readonly int _buoyancy;
+
         private MovingModule _MovingModule;
-        public int Wheels => _wheels;
         public string Name => GetType().Name;
-        public Plane(int horsePower, Engine.FuelType fuelType) : base (horsePower, fuelType)
+        public int Buoyancy => _buoyancy;
+        public Hydroplane(int horsePower, Engine.FuelType fuelType, int buoyancy) : base(horsePower, fuelType)
         {
-            AvailableEnvironments.Add(Environments.OnGround);
+            ActualEnvironment = Environments.Sailing;
+            AvailableEnvironments.Add(Environments.Sailing);
             AvailableEnvironments.Add(Environments.Flying);
-            _wheels = 2;
-            _MovingModule = new MovingModule(true, Wheels, true);
+            _MovingModule = new MovingModule(true, true, buoyancy);
+            _buoyancy = buoyancy;
         }
         public void Accelerate(double targetSpeed)
         {
@@ -27,7 +29,12 @@ namespace ClassLibrary1
         }
         public void Land()
         {
-            _MovingModule.TryToDrive(ref ActualEnvironment, _state, ref MovingSpeed, Name);
+            if(_state == State.Staying)
+                Console.WriteLine($"{Name} is not moving.");
+            else if(ActualEnvironment == Environments.Sailing)
+                Console.WriteLine($"{Name} is not flying.");
+            else
+            Console.WriteLine($"{Name} can not land on the ground.");
         }
         public void SlowDown(double targetSpeed)
         {
@@ -39,7 +46,12 @@ namespace ClassLibrary1
         }
         public override string ToString()
         {
-            return $"{Name}" + base.ToString() + $"\nWheels: {Wheels}\n";
+            return $"{Name}" + base.ToString() + "\n";
+        }
+
+        public void LandOnWater()
+        {
+            _MovingModule.TryToSail(ref ActualEnvironment, _state, ref MovingSpeed, Name);
         }
     }
 }

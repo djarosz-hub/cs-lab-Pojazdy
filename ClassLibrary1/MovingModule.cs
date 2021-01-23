@@ -42,6 +42,26 @@ namespace ClassLibrary1
             flyingModule = new FlyingModule();
         }
         /// <summary>
+        /// for sailing and flying vehicles
+        /// </summary>
+        /// <param name="flies"></param>
+        /// <param name="sails"></param>
+        /// <param name="buoyancy"></param>
+        internal MovingModule(bool flies, bool sails, int buoyancy)
+        {
+            sailingModule = new SailingModule(buoyancy);
+            flyingModule = new FlyingModule();
+        }
+        /// <summary>
+        /// for sailing vehicles
+        /// </summary>
+        /// <param name="buoyancy"></param>
+        /// <param name="sails"></param>
+        internal MovingModule(int buoyancy, bool sails)
+        {
+            sailingModule = new SailingModule(buoyancy);
+        }
+        /// <summary>
         /// for driving, flying and sailing vehicles
         /// </summary>
         /// <param name="drives"></param>

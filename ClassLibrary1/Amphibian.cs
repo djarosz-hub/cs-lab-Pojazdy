@@ -15,13 +15,12 @@ namespace ClassLibrary1
             AvailableEnvironments.Add(Environments.Sailing);
             _wheels = 8;
             _buoyancy = buoyancy;
-            _MovingModule = new MovingModule(true, 8, true, buoyancy);
+            _MovingModule = new MovingModule(true, Wheels, true, Buoyancy);
         }
 
         public int Buoyancy => _buoyancy;
         public int Wheels => _wheels;
         public string Name => GetType().Name;
-
         public void Accelerate(double targetSpeed)
         {
             _MovingModule.TryToAccelerate(ActualEnvironment, ref _state, ref MovingSpeed, targetSpeed, Name);
