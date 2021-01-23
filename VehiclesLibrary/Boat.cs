@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using ClassLibrary1;
 
-namespace ClassLibrary1
+namespace VehiclesLibrary
 {
     public class Boat : EnginePoweredVehicle, IVehicle, ISailable
     {

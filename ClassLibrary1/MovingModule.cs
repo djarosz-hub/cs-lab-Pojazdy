@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
+[assembly: InternalsVisibleTo("VehiclesLibrary")]
 namespace ClassLibrary1
 {
     internal class MovingModule

@@ -1,37 +1,39 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
 using ClassLibrary1;
 
 namespace VehiclesLibrary
 {
-    public class Car : EnginePoweredVehicle, IVehicle
+    public class Car : EnginePoweredVehicle, IVehicle, IDriveable
     {
-        private int _wheels;
+        private readonly int _wheels;
         private MovingModule _MovingModule;
         public Car(int horsePower, Engine.FuelType fuelType) : base(horsePower, fuelType)
         {
             AvailableEnvironments.Add(Environments.OnGround);
             _wheels = 4;
-            _MovingModule = new MovingModule(true, 4);
+            _MovingModule = new MovingModule(true, Wheels);
         }
         public string Name => GetType().Name;
         public int Wheels => _wheels;
         public override string ToString()
         {
-            return $"\n{Name}\nWheels: {Wheels}" + base.ToString();
+            return $"{Name}" + base.ToString() + $"\nWheels: {Wheels}\n";
         }
-        public void Accelerate(double value)
+        public void Accelerate(double targetSpeed)
         {
-            throw new NotImplementedException();
+            _MovingModule.TryToAccelerate(ActualEnvironment, ref _state, ref MovingSpeed, targetSpeed, Name);
         }
 
-        public void SlowDown(double value)
+        public void SlowDown(double targetSpeed)
         {
-            throw new NotImplementedException();
+            _MovingModule.TryToSlowDown(ActualEnvironment, ref _state, ref MovingSpeed, targetSpeed, Name);
         }
 
         public void StopVehicle()
         {
-            throw new NotImplementedException();
+            _MovingModule.StopMoving(ref _state, ActualEnvironment, ref MovingSpeed, Name);
         }
     }
 }

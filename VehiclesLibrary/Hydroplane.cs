@@ -1,68 +1,58 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using ClassLibrary1;
 
-namespace ClassLibrary1
+namespace VehiclesLibrary
 {
-    public class UFO : EnginePoweredVehicle, IVehicle, ISailable, IFlyable, IWaterLandable, IDriveable
+    public class Hydroplane : EnginePoweredVehicle, IVehicle, IFlyable, IWaterLandable
     {
-        private readonly int _wheels;
         private readonly int _buoyancy;
+
         private MovingModule _MovingModule;
         public string Name => GetType().Name;
         public int Buoyancy => _buoyancy;
-        public int Wheels => _wheels;
-        public UFO() : base(int.MaxValue, Engine.FuelType.Electric)
+        public Hydroplane(int horsePower, Engine.FuelType fuelType, int buoyancy) : base(horsePower, fuelType)
         {
-            AvailableEnvironments.Add(Environments.OnGround);
+            ActualEnvironment = Environments.Sailing;
             AvailableEnvironments.Add(Environments.Sailing);
             AvailableEnvironments.Add(Environments.Flying);
-            _wheels = 50;
-            _buoyancy = 100000;
-            _MovingModule = new MovingModule(true, Wheels, true, true, Buoyancy);
+            _MovingModule = new MovingModule(true, true, buoyancy);
+            _buoyancy = buoyancy;
         }
         public void Accelerate(double targetSpeed)
         {
             _MovingModule.TryToAccelerate(ActualEnvironment, ref _state, ref MovingSpeed, targetSpeed, Name);
         }
-
         public void Fly()
         {
             _MovingModule.TryToFly(ref ActualEnvironment, _state, ref MovingSpeed, Name);
         }
-
         public void Land()
         {
-            _MovingModule.TryToDrive(ref ActualEnvironment, _state, ref MovingSpeed, Name);
+            if (_state == State.Staying)
+                Console.WriteLine($"{Name} is not moving.");
+            else if (ActualEnvironment == Environments.Sailing)
+                Console.WriteLine($"{Name} is not flying.");
+            else
+                Console.WriteLine($"{Name} can not land on the ground.");
         }
-
-        public void LandOnWater()
-        {
-            _MovingModule.TryToSail(ref ActualEnvironment, _state, ref MovingSpeed, Name);
-        }
-
-        public void LeaveWater()
-        {
-            _MovingModule.TryToDrive(ref ActualEnvironment, _state, ref MovingSpeed, Name);
-        }
-
-        public void Sail()
-        {
-            _MovingModule.TryToSail(ref ActualEnvironment, _state, ref MovingSpeed, Name);
-        }
-
         public void SlowDown(double targetSpeed)
         {
             _MovingModule.TryToSlowDown(ActualEnvironment, ref _state, ref MovingSpeed, targetSpeed, Name);
         }
-
         public void StopVehicle()
         {
             _MovingModule.StopMoving(ref _state, ActualEnvironment, ref MovingSpeed, Name);
         }
         public override string ToString()
         {
-            return $"{Name}" + base.ToString() + $"\nWheels: {Wheels}\nBuoyancy: {Buoyancy}\n";
+            return $"{Name}" + base.ToString() + "\n";
+        }
+
+        public void LandOnWater()
+        {
+            _MovingModule.TryToSail(ref ActualEnvironment, _state, ref MovingSpeed, Name);
         }
     }
 }
